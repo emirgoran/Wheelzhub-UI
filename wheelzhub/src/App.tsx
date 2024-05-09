@@ -4,6 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import VehiclesOverview from './components/VehiclesOverview';
+import VehiclesCreate from './components/VehiclesCreate';
 
 function App() {
   const [mode, setMode] = React.useState<PaletteMode>('light');
@@ -18,6 +19,7 @@ function App() {
       <CssBaseline />
       <Box sx={{ bgcolor: 'background.default' }}>
         <VehiclesOverview />
+        <VehiclesCreate />
       </Box>
     </ThemeProvider>
   );

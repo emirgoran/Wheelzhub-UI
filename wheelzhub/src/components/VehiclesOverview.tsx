@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import Box from '@mui/material/Box';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface Vehicle {
   id: number;
@@ -36,6 +37,22 @@ function VehiclesOverview() {
     }
   };
 
+  // Function to delete a vehicle by ID
+  const deleteVehicle = async (id: number) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/vehicles/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setVehicles((prevVehicles) => prevVehicles.filter((vehicle) => vehicle.id !== id));
+      } else {
+        const error = await response.text();
+      }
+    } catch (err: any) {
+    }
+  };
+
   // Fetch data on component mount
   useEffect(() => {
     fetchVehicles();
@@ -55,6 +72,7 @@ function VehiclesOverview() {
                 <TableCell align="right">Model</TableCell>
                 <TableCell align="right">Year</TableCell>
                 <TableCell align="right">License&nbsp;plate</TableCell>
+                <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -64,10 +82,20 @@ function VehiclesOverview() {
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell align="right">{vehicle.id}</TableCell>
-                  <TableCell component="th" scope="row">{vehicle.make}</TableCell>
+                  <TableCell align="right" component="th" scope="row">{vehicle.make}</TableCell>
                   <TableCell align="right">{vehicle.model}</TableCell>
                   <TableCell align="right">{vehicle.year}</TableCell>
                   <TableCell align="right">{vehicle.licensePlate}</TableCell>
+
+                  <TableCell align="right">
+                    <IconButton
+                      aria-label="delete"
+                      color="secondary"
+                      onClick={() => deleteVehicle(vehicle.id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
