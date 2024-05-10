@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
+import { Button, Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 
 interface Vehicle {
@@ -58,62 +58,67 @@ function VehiclesCreate() {
 
   // Form rendering with Material-UI
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" p={3}>
-      <Typography variant="h4" gutterBottom>
-        Create New Vehicle
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <Box mb={2}>
-          <TextField
-            label="Make"
-            name="make"
-            value={formValues.make}
-            onChange={handleInputChange}
-            required
-            fullWidth
-          />
-        </Box>
-        <Box mb={2}>
-          <TextField
-            label="Model"
-            name="model"
-            value={formValues.model}
-            onChange={handleInputChange}
-            required
-            fullWidth
-          />
-        </Box>
-        <Box mb={2}>
-          <TextField
-            label="Year"
-            type="number"
-            name="year"
-            value={formValues.year}
-            onChange={handleInputChange}
-            required
-            fullWidth
-          />
-        </Box>
-        <Box mb={2}>
-          <TextField
-            label="License plate"
-            name="licensePlate"
-            value={formValues.licensePlate}
-            onChange={handleInputChange}
-            required
-            fullWidth
-          />
-        </Box>
-        <Button variant="contained" type="submit" color="primary">
-          Create Vehicle
-        </Button>
-      </form>
-      {message && (
-        <Typography color="error" mt={2}>
-          {message}
-        </Typography>
-      )}
-    </Box>
+    <Container
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <Box display="flex" flexDirection="column" alignItems="center" p={3} maxWidth="lg">
+        <form onSubmit={handleSubmit}>
+          <Box mb={2}>
+            <TextField
+              label="Make"
+              name="make"
+              value={formValues.make}
+              onChange={handleInputChange}
+              required
+              fullWidth
+            />
+          </Box>
+          <Box mb={2}>
+            <TextField
+              label="Model"
+              name="model"
+              value={formValues.model}
+              onChange={handleInputChange}
+              required
+              fullWidth
+            />
+          </Box>
+          <Box mb={2}>
+            <TextField
+              label="Year"
+              type="number"
+              name="year"
+              value={formValues.year}
+              onChange={handleInputChange}
+              required
+              fullWidth
+            />
+          </Box>
+          <Box mb={2}>
+            <TextField
+              label="License plate"
+              name="licensePlate"
+              value={formValues.licensePlate}
+              onChange={handleInputChange}
+              required
+              fullWidth
+            />
+          </Box>
+          <Button variant="contained" type="submit" color="primary">
+            Create Vehicle
+          </Button>
+        </form>
+        {message && (
+          <Typography color="error" mt={2}>
+            {message}
+          </Typography>
+        )}
+      </Box>
+    </Container>
   );
 };
 

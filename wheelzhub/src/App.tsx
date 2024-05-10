@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import VehiclesOverview from './components/VehiclesOverview';
 import VehiclesCreate from './components/VehiclesCreate';
+import AppAppBar from './components/AppAppBar';
 
 function App() {
   const [mode, setMode] = React.useState<PaletteMode>('light');
@@ -17,7 +18,8 @@ function App() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <Box sx={{ bgcolor: 'background.default' }}>
+      <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
+      <Box sx={{ bgcolor: 'background.default', pt: 14 }}>
         <VehiclesOverview />
         <VehiclesCreate />
       </Box>

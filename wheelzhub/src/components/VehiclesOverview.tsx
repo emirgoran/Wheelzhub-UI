@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Button, Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -59,50 +59,58 @@ function VehiclesOverview() {
   }, []);
 
   return (
-    <Box sx={{ bgcolor: 'background.default' }}>
-      {loading && <p>Loading vehicles data...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {!loading && !error && (
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Vehicle ID</TableCell>
-                <TableCell align="right">Make</TableCell>
-                <TableCell align="right">Model</TableCell>
-                <TableCell align="right">Year</TableCell>
-                <TableCell align="right">License&nbsp;plate</TableCell>
-                <TableCell align="right">Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {vehicles.map((vehicle) => (
-                <TableRow
-                  key={vehicle.id}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell align="right">{vehicle.id}</TableCell>
-                  <TableCell align="right" component="th" scope="row">{vehicle.make}</TableCell>
-                  <TableCell align="right">{vehicle.model}</TableCell>
-                  <TableCell align="right">{vehicle.year}</TableCell>
-                  <TableCell align="right">{vehicle.licensePlate}</TableCell>
-
-                  <TableCell align="right">
-                    <IconButton
-                      aria-label="delete"
-                      color="secondary"
-                      onClick={() => deleteVehicle(vehicle.id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
+    <Container
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <Box sx={{ bgcolor: 'background.default', width: '100%' }}>
+        {loading && <p>Loading vehicles data...</p>}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {!loading && !error && (
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Vehicle ID</TableCell>
+                  <TableCell align="right">Make</TableCell>
+                  <TableCell align="right">Model</TableCell>
+                  <TableCell align="right">Year</TableCell>
+                  <TableCell align="right">License&nbsp;plate</TableCell>
+                  <TableCell align="right">Actions</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      )}
-    </Box>
+              </TableHead>
+              <TableBody>
+                {vehicles.map((vehicle) => (
+                  <TableRow
+                    key={vehicle.id}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell align="right">{vehicle.id}</TableCell>
+                    <TableCell align="right" component="th" scope="row">{vehicle.make}</TableCell>
+                    <TableCell align="right">{vehicle.model}</TableCell>
+                    <TableCell align="right">{vehicle.year}</TableCell>
+                    <TableCell align="right">{vehicle.licensePlate}</TableCell>
+
+                    <TableCell align="right">
+                      <IconButton
+                        aria-label="delete"
+                        color="secondary"
+                        onClick={() => deleteVehicle(vehicle.id)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+      </Box>
+    </Container>
   );
 }
 
