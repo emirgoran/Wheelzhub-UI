@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Container, TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { Vehicle, VehicleEditProps } from '../types/Vehicle';
+import { patchData } from '../api/ApiUtils';
 
 function VehicleEdit({ vehicle }: VehicleEditProps) {
   // State for managing form inputs
@@ -20,28 +21,13 @@ function VehicleEdit({ vehicle }: VehicleEditProps) {
     setMessage(null);
 
     try {
-      const response = await fetch(`http://localhost:8080/api/vehicles/${vehicle.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formValues),
-      });
-
-      if (response.ok) {
-        // Successful creation
-        setMessage('Vehicle updated successfully!');
-        setFormValues({ id: 0, make: '', model: '', year: new Date().getFullYear(), licensePlate: '' }); // Reset form inputs
-
-        Object.assign(vehicle, formValues);
-      } else {
-        // Server-side errors
-        const error = await response.text();
-        setMessage(`Error: ${error}`);
-      }
+      patchData(`${process.env.REACT_APP_API_PATH}/vehicles/${vehicle.id}`, formValues)
+        .then(() => {
+          setMessage('Vehicle updated successfully!');
+          Object.assign(vehicle, formValues);
+        });
     } catch (err: any) {
-      // Network errors
-      setMessage(`Network error: ${err.message}`);
+      setMessage(`Error: ${err.message}`);
     }
   };
 

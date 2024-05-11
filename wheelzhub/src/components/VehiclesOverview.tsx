@@ -5,8 +5,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import VehicleEditModal from './VehicleEditModal';
 import { Vehicle } from '../types/Vehicle';
+import { deleteData, fetchData } from '../api/ApiUtils';
 
 function VehiclesOverview() {
+  
+  // EDIT VEHICLE SECTION
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [vehicle, setVehicle] = useState<Vehicle>();
@@ -19,6 +22,8 @@ function VehiclesOverview() {
     openModal();
   };
 
+  // VIEW AND DELETE VEHICLE SECTION
+
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,14 +33,9 @@ function VehiclesOverview() {
     try {
       setLoading(true);
       setError(null);
+      fetchData<Vehicle[]>(`${process.env.REACT_APP_API_PATH}/vehicles`)
+        .then(data => setVehicles(data));
 
-      // Fetch data from the API
-      const response = await fetch('http://localhost:8080/api/vehicles');
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const data = await response.json() as Vehicle[];
-      setVehicles(data);
     } catch (err: any) {
       setError('Failed to fetch vehicles data. ' + err.message);
     } finally {
@@ -46,16 +46,12 @@ function VehiclesOverview() {
   // Function to delete a vehicle by ID
   const deleteVehicle = async (id: number) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/vehicles/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (response.ok) {
-        setVehicles((prevVehicles) => prevVehicles.filter((vehicle) => vehicle.id !== id));
-      } else {
-        const error = await response.text();
-      }
+      deleteData(`${process.env.REACT_APP_API_PATH}/vehicles/${id}`)
+        .then(() => {
+          setVehicles((prevVehicles) => prevVehicles.filter((vehicle) => vehicle.id !== id));
+        });
     } catch (err: any) {
+      setError('Failed to delete vehicle. ' + err.message);
     }
   };
 

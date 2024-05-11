@@ -3,15 +3,19 @@ import { Button, Container, TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { Vehicle } from '../types/Vehicle';
 
+import { postData } from '../api/ApiUtils';
+
+const defaultVehicleData: Vehicle = {
+  id: 0,
+  make: '',
+  model: '',
+  year: new Date().getFullYear(),
+  licensePlate: ''
+};
+
 function VehicleCreate() {
   // State for managing form inputs
-  const [formValues, setFormValues] = useState<Vehicle>({
-    id: 0,
-    make: '',
-    model: '',
-    year: new Date().getFullYear(),
-    licensePlate: ''
-  });
+  const [formValues, setFormValues] = useState<Vehicle>(defaultVehicleData);
   const [message, setMessage] = useState<string | null>(null);
 
   // Handler to update form values on input change
@@ -26,26 +30,13 @@ function VehicleCreate() {
     setMessage(null);
 
     try {
-      const response = await fetch('http://localhost:8080/api/vehicles', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formValues),
-      });
-
-      if (response.ok) {
-        // Successful creation
-        setMessage('Vehicle created successfully!');
-        setFormValues({ id: 0, make: '', model: '', year: new Date().getFullYear(), licensePlate: '' }); // Reset form inputs
-      } else {
-        // Server-side errors
-        const error = await response.text();
-        setMessage(`Error: ${error}`);
-      }
+      postData(`${process.env.REACT_APP_API_PATH}/vehicles`, formValues)
+        .then(() => {
+          setMessage('Vehicle created successfully!');
+          setFormValues(defaultVehicleData); // Reset form inputs
+        })
     } catch (err: any) {
-      // Network errors
-      setMessage(`Network error: ${err.message}`);
+      setMessage(`Error: ${err.message}`);
     }
   };
 
