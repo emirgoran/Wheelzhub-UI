@@ -1,17 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
-
-interface Vehicle {
-  id: number;
-  make: string;
-  model: string;
-  year: number;
-  licensePlate: string;
-}
+import EditIcon from '@mui/icons-material/Edit';
+import VehicleEditModal from './VehicleEditModal';
+import { Vehicle } from '../types/Vehicle';
 
 function VehiclesOverview() {
+
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [vehicle, setVehicle] = useState<Vehicle>();
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+
+  const updateVehicle = (vehicle: Vehicle) => {
+    setVehicle(vehicle);
+    openModal();
+  };
 
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -102,6 +108,14 @@ function VehiclesOverview() {
                       >
                         <DeleteIcon />
                       </IconButton>
+
+                      <IconButton
+                        aria-label="update"
+                        color="primary"
+                        onClick={() => updateVehicle(vehicle)}
+                      >
+                        <EditIcon />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -110,6 +124,9 @@ function VehiclesOverview() {
           </TableContainer>
         )}
       </Box>
+
+      {vehicle && <VehicleEditModal vehicle={vehicle} open={isModalOpen} onClose={closeModal} />}
+
     </Container>
   );
 }

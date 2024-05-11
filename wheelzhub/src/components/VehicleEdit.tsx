@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
 import { Button, Container, TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
-import { Vehicle } from '../types/Vehicle';
+import { Vehicle, VehicleEditProps } from '../types/Vehicle';
 
-function VehicleCreate() {
+function VehicleEdit({ vehicle }: VehicleEditProps) {
   // State for managing form inputs
-  const [formValues, setFormValues] = useState<Vehicle>({
-    id: 0,
-    make: '',
-    model: '',
-    year: new Date().getFullYear(),
-    licensePlate: ''
-  });
+  const [formValues, setFormValues] = useState<Vehicle>(vehicle);
   const [message, setMessage] = useState<string | null>(null);
 
   // Handler to update form values on input change
@@ -26,8 +20,8 @@ function VehicleCreate() {
     setMessage(null);
 
     try {
-      const response = await fetch('http://localhost:8080/api/vehicles', {
-        method: 'POST',
+      const response = await fetch(`http://localhost:8080/api/vehicles/${vehicle.id}`, {
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -36,8 +30,10 @@ function VehicleCreate() {
 
       if (response.ok) {
         // Successful creation
-        setMessage('Vehicle created successfully!');
+        setMessage('Vehicle updated successfully!');
         setFormValues({ id: 0, make: '', model: '', year: new Date().getFullYear(), licensePlate: '' }); // Reset form inputs
+
+        Object.assign(vehicle, formValues);
       } else {
         // Server-side errors
         const error = await response.text();
@@ -49,6 +45,7 @@ function VehicleCreate() {
     }
   };
 
+  // Form rendering with Material-UI
   return (
     <Container
       sx={{
@@ -101,7 +98,7 @@ function VehicleCreate() {
             />
           </Box>
           <Button variant="contained" type="submit" color="primary">
-            Create Vehicle
+            Save changes
           </Button>
         </form>
         {message && (
@@ -114,4 +111,4 @@ function VehicleCreate() {
   );
 };
 
-export default VehicleCreate;
+export default VehicleEdit;
