@@ -15,6 +15,7 @@ import ToggleColorMode from './ToggleColorMode';
 
 import logoLight from '../logo-light.svg'
 import logoDark from '../logo-dark.svg'
+import VehicleMenu from './VehicleMenu';
 
 interface AppAppBarProps {
   mode: PaletteMode;
@@ -88,6 +89,7 @@ export default function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
             </Box>
 
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            <VehicleMenu />
               <Button
                 variant="text"
                 color="info"

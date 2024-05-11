@@ -6,6 +6,11 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import VehiclesOverview from './components/VehiclesOverview';
 import VehicleCreate from './components/VehicleCreate';
 import AppAppBar from './components/AppAppBar';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route
+} from 'react-router-dom';
 
 function App() {
   const [mode, setMode] = React.useState<PaletteMode>('light');
@@ -16,14 +21,23 @@ function App() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <CssBaseline />
-      <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
-      <Box sx={{ bgcolor: 'background.default', pt: 14 }}>
-        <VehiclesOverview />
-        <VehicleCreate />
-      </Box>
-    </ThemeProvider>
+    <Router>
+      <ThemeProvider theme={defaultTheme}>
+        <CssBaseline />
+        <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
+        <Box sx={{ bgcolor: 'background.default', pt: 14 }}>
+
+          <div>
+            <Routes>
+              <Route path="/" element={<VehiclesOverview />} />
+              <Route path="/vehiclesOverview" element={<VehiclesOverview />} />
+              <Route path="/vehicleCreate" element={<VehicleCreate />} />
+            </Routes>
+          </div>
+
+        </Box>
+      </ThemeProvider>
+    </Router>
   );
 }
 
