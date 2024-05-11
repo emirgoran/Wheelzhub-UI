@@ -10,7 +10,7 @@ interface Vehicle {
   licensePlate: string;
 }
 
-function VehiclesCreate() {
+function VehicleCreate() {
   // State for managing form inputs
   const [formValues, setFormValues] = useState<Vehicle>({
     id: 0,
@@ -122,4 +122,4 @@ function VehiclesCreate() {
   );
 };
 
-export default VehiclesCreate;
+export default VehicleCreate;

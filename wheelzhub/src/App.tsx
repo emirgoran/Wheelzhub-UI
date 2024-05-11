@@ -4,7 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import VehiclesOverview from './components/VehiclesOverview';
-import VehiclesCreate from './components/VehiclesCreate';
+import VehicleCreate from './components/VehicleCreate';
 import AppAppBar from './components/AppAppBar';
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
       <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
       <Box sx={{ bgcolor: 'background.default', pt: 14 }}>
         <VehiclesOverview />
-        <VehiclesCreate />
+        <VehicleCreate />
       </Box>
     </ThemeProvider>
   );
