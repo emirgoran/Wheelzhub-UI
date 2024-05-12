@@ -16,6 +16,7 @@ import UserCreate from './components/UserCreate';
 import UserLogin from './components/UserLogin';
 import { UserProvider } from './components/UserContext';
 import UserEdit from './components/UserEdit';
+import NotFound from './components/NotFound';
 
 function App() {
   const [mode, setMode] = React.useState<PaletteMode>('light');
@@ -39,10 +40,12 @@ function App() {
                   <Route path="/" element={<VehiclesOverview />} />
                   <Route path="/vehiclesOverview" element={<VehiclesOverview />} />
                   <Route path="/vehicleCreate" element={<VehicleCreate />} />
-                  
+
                   <Route path="/userRegister" element={<UserCreate />} />
                   <Route path="/userLogin" element={<UserLogin />} />
                   <Route path="/userEdit" element={<UserEdit />} />
+
+                  <Route path="*" element={<NotFound />} />
                 </Routes>
               </div>
 
