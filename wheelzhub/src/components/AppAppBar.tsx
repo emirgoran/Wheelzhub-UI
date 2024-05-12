@@ -12,10 +12,13 @@ import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ToggleColorMode from './ToggleColorMode';
+import { useNavigate } from 'react-router-dom';
 
 import logoLight from '../logo-light.svg'
 import logoDark from '../logo-dark.svg'
 import VehicleMenu from './VehicleMenu';
+import { useUser } from './UserContext';
+import UserMenu from './UserMenu';
 
 interface AppAppBarProps {
   mode: PaletteMode;
@@ -23,10 +26,25 @@ interface AppAppBarProps {
 }
 
 export default function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
+
+  // To navigate between pages
+  const navigate = useNavigate();
+
+  // To manage user login
+  const { user, setUser } = useUser();
+
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
+  };
+
+  const handleSignIn = () => {
+    navigate('/userLogin');
+  };
+
+  const handleSignUp = () => {
+    navigate('/userRegister');
   };
 
   const scrollToSection = (sectionId: string) => {
@@ -89,25 +107,7 @@ export default function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
             </Box>
 
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <VehicleMenu />
-              <Button
-                variant="text"
-                color="info"
-                size="small"
-                onClick={() => scrollToSection('header')}
-              >
-                Movie search
-              </Button>
-
-              <Button
-                variant="text"
-                color="info"
-                size="small"
-                onClick={() => scrollToSection('favorite-movies')}
-              >
-                Favorites
-              </Button>
-
+              <VehicleMenu />
               <Button
                 variant="text"
                 color="info"
@@ -126,12 +126,18 @@ export default function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
             }}
           >
             <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
-            <Button color="primary" variant="text" size="small">
-              Sign in
-            </Button>
-            <Button color="primary" variant="contained" size="small">
-              Sign up
-            </Button>
+            {!user ? (
+              <>
+                <Button color="primary" variant="text" size="small" onClick={handleSignIn}>
+                  Sign in
+                </Button>
+                <Button color="primary" variant="contained" size="small" onClick={handleSignUp}>
+                  Sign up
+                </Button>
+              </>
+            ) : (
+              <UserMenu />
+            )}
           </Box>
           <Box sx={{ display: { sm: 'flex', md: 'none' } }}>
             <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
@@ -161,16 +167,25 @@ export default function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 <MenuItem onClick={() => scrollToSection('highlights')}>
                   Highlights
                 </MenuItem>
-                <MenuItem>
-                  <Button color="primary" variant="contained" fullWidth>
-                    Sign up
-                  </Button>
-                </MenuItem>
-                <MenuItem>
-                  <Button color="primary" variant="outlined" fullWidth>
-                    Sign in
-                  </Button>
-                </MenuItem>
+
+                {!user ? (
+                  <>
+                    <MenuItem>
+                      <Button color="primary" variant="contained" fullWidth onClick={handleSignIn}>
+                        Sign up
+                      </Button>
+                    </MenuItem>
+                    <MenuItem>
+                      <Button color="primary" variant="outlined" fullWidth onClick={handleSignUp}>
+                        Sign in
+                      </Button>
+                    </MenuItem>
+                  </>
+                ) : (
+                  <MenuItem>
+                    <UserMenu />
+                  </MenuItem>
+                )}
               </Box>
             </Drawer>
           </Box>
