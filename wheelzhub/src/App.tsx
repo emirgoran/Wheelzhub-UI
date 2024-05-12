@@ -11,6 +11,7 @@ import {
   Routes,
   Route
 } from 'react-router-dom';
+import { SnackbarProvider } from 'notistack';
 
 function App() {
   const [mode, setMode] = React.useState<PaletteMode>('light');
@@ -21,23 +22,25 @@ function App() {
   };
 
   return (
-    <Router>
-      <ThemeProvider theme={defaultTheme}>
-        <CssBaseline />
-        <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
-        <Box sx={{ bgcolor: 'background.default', pt: 14 }}>
+    <SnackbarProvider>
+      <Router>
+        <ThemeProvider theme={defaultTheme}>
+          <CssBaseline />
+          <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
+          <Box sx={{ bgcolor: 'background.default', pt: 14 }}>
 
-          <div>
-            <Routes>
-              <Route path="/" element={<VehiclesOverview />} />
-              <Route path="/vehiclesOverview" element={<VehiclesOverview />} />
-              <Route path="/vehicleCreate" element={<VehicleCreate />} />
-            </Routes>
-          </div>
+            <div>
+              <Routes>
+                <Route path="/" element={<VehiclesOverview />} />
+                <Route path="/vehiclesOverview" element={<VehiclesOverview />} />
+                <Route path="/vehicleCreate" element={<VehicleCreate />} />
+              </Routes>
+            </div>
 
-        </Box>
-      </ThemeProvider>
-    </Router>
+          </Box>
+        </ThemeProvider>
+      </Router>
+    </SnackbarProvider>
   );
 }
 

@@ -33,7 +33,7 @@ const VehicleEditModal: React.FC<VehicleEditModalProps> = ({ vehicle, open, onCl
         <Typography id="edit-vehicle-modal-title" variant="h6">
           Edit Vehicle {vehicle.id}
         </Typography>
-        <VehicleEdit vehicle={vehicle} />
+        <VehicleEdit vehicle={vehicle} onFinishedEditing={onClose} />
         <Button onClick={onClose} variant="outlined" color="secondary">
           Close
         </Button>

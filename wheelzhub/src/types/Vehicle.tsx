@@ -8,4 +8,5 @@ export interface Vehicle {
 
 export interface VehicleEditProps {
   vehicle: Vehicle;
+  onFinishedEditing: () => void;
 }

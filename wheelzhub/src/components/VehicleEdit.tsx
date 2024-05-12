@@ -3,11 +3,15 @@ import { Button, Container, TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { Vehicle, VehicleEditProps } from '../types/Vehicle';
 import { patchData } from '../api/ApiUtils';
+import { useSnackbar } from 'notistack';
 
-function VehicleEdit({ vehicle }: VehicleEditProps) {
+function VehicleEdit({ vehicle, onFinishedEditing }: VehicleEditProps) {
+
+  // Snackbar
+  const { enqueueSnackbar } = useSnackbar();
+
   // State for managing form inputs
   const [formValues, setFormValues] = useState<Vehicle>(vehicle);
-  const [message, setMessage] = useState<string | null>(null);
 
   // Handler to update form values on input change
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,14 +22,14 @@ function VehicleEdit({ vehicle }: VehicleEditProps) {
   // Handler to submit the form and create a vehicle
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault(); // Prevent default form submission
-    setMessage(null);
 
     patchData(`${process.env.REACT_APP_API_PATH}/vehicles/${vehicle.id}`, formValues)
       .then(() => {
-        setMessage('Vehicle updated successfully!');
+        enqueueSnackbar('Vehicle updated successfully!', { preventDuplicate: true });
         Object.assign(vehicle, formValues); // Copy back updated values into vehicle
+        onFinishedEditing();
       }).catch(err => {
-        setMessage(`Error: ${err.message}`);
+        enqueueSnackbar(`Could not update vehicle! ${err.message}`, { preventDuplicate: true });
       });
   };
 
@@ -85,11 +89,6 @@ function VehicleEdit({ vehicle }: VehicleEditProps) {
             Save changes
           </Button>
         </form>
-        {message && (
-          <Typography color="error" mt={2}>
-            {message}
-          </Typography>
-        )}
       </Box>
     </Container>
   );

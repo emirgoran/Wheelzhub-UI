@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import { Vehicle } from '../types/Vehicle';
 
 import { postData } from '../api/ApiUtils';
+import { useSnackbar } from 'notistack';
 
 const defaultVehicleData: Vehicle = {
   id: 0,
@@ -14,9 +15,11 @@ const defaultVehicleData: Vehicle = {
 };
 
 function VehicleCreate() {
+  // Snackbar
+  const { enqueueSnackbar } = useSnackbar();
+  
   // State for managing form inputs
   const [formValues, setFormValues] = useState<Vehicle>(defaultVehicleData);
-  const [message, setMessage] = useState<string | null>(null);
 
   // Handler to update form values on input change
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,15 +30,14 @@ function VehicleCreate() {
   // Handler to submit the form and create a vehicle
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault(); // Prevent default form submission
-    setMessage(null);
 
     postData(`${process.env.REACT_APP_API_PATH}/vehicles`, formValues)
       .then(() => {
-        setMessage('Vehicle created successfully!');
+        enqueueSnackbar('Vehicle created successfully!', { preventDuplicate: true });
         setFormValues(defaultVehicleData); // Reset form inputs
       })
       .catch(err => {
-        setMessage(`Error: ${err.message}`);
+        enqueueSnackbar(`Could not create vehicle! ${err.message}`, { preventDuplicate: true });
       });
   };
 
@@ -94,11 +96,6 @@ function VehicleCreate() {
             Create Vehicle
           </Button>
         </form>
-        {message && (
-          <Typography color="error" mt={2}>
-            {message}
-          </Typography>
-        )}
       </Box>
     </Container>
   );
