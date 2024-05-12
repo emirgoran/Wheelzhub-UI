@@ -157,6 +157,7 @@ export default function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   </IconButton>
                 </Box>
                 <Divider sx={{ my: 3 }} />
+                <VehicleMenu />
                 <MenuItem onClick={() => scrollToSection('highlights')}>
                   Highlights
                 </MenuItem>

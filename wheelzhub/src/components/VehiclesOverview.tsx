@@ -8,7 +8,7 @@ import { Vehicle } from '../types/Vehicle';
 import { deleteData, fetchData } from '../api/ApiUtils';
 
 function VehiclesOverview() {
-  
+
   // EDIT VEHICLE SECTION
 
   const [isModalOpen, setModalOpen] = useState(false);
@@ -30,29 +30,29 @@ function VehiclesOverview() {
 
   // Function to fetch vehicles from the API
   const fetchVehicles = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      fetchData<Vehicle[]>(`${process.env.REACT_APP_API_PATH}/vehicles`)
-        .then(data => setVehicles(data));
+    setLoading(true);
+    setError(null);
 
-    } catch (err: any) {
-      setError('Failed to fetch vehicles data. ' + err.message);
-    } finally {
-      setLoading(false);
-    }
+    fetchData<Vehicle[]>(`${process.env.REACT_APP_API_PATH}/vehicles`)
+      .then((data) => {
+        setVehicles(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError('Failed to fetch vehicles data. ' + err.message);
+        setLoading(false);
+      });
   };
 
   // Function to delete a vehicle by ID
   const deleteVehicle = async (id: number) => {
-    try {
-      deleteData(`${process.env.REACT_APP_API_PATH}/vehicles/${id}`)
-        .then(() => {
-          setVehicles((prevVehicles) => prevVehicles.filter((vehicle) => vehicle.id !== id));
-        });
-    } catch (err: any) {
-      setError('Failed to delete vehicle. ' + err.message);
-    }
+    deleteData(`${process.env.REACT_APP_API_PATH}/vehicles/${id}`)
+      .then(() => {
+        setVehicles((prevVehicles) => prevVehicles.filter((vehicle) => vehicle.id !== id));
+      })
+      .catch(err => {
+        setError('Failed to delete vehicle. ' + err.message);
+      });
   };
 
   // Fetch data on component mount
@@ -85,7 +85,7 @@ function VehiclesOverview() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {vehicles.map((vehicle) => (
+                {vehicles && vehicles.map((vehicle) => (
                   <TableRow
                     key={vehicle.id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

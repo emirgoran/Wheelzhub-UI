@@ -29,15 +29,14 @@ function VehicleCreate() {
     event.preventDefault(); // Prevent default form submission
     setMessage(null);
 
-    try {
-      postData(`${process.env.REACT_APP_API_PATH}/vehicles`, formValues)
-        .then(() => {
-          setMessage('Vehicle created successfully!');
-          setFormValues(defaultVehicleData); // Reset form inputs
-        })
-    } catch (err: any) {
-      setMessage(`Error: ${err.message}`);
-    }
+    postData(`${process.env.REACT_APP_API_PATH}/vehicles`, formValues)
+      .then(() => {
+        setMessage('Vehicle created successfully!');
+        setFormValues(defaultVehicleData); // Reset form inputs
+      })
+      .catch(err => {
+        setMessage(`Error: ${err.message}`);
+      });
   };
 
   return (

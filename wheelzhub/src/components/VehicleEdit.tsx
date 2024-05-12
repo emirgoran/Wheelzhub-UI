@@ -20,15 +20,13 @@ function VehicleEdit({ vehicle }: VehicleEditProps) {
     event.preventDefault(); // Prevent default form submission
     setMessage(null);
 
-    try {
-      patchData(`${process.env.REACT_APP_API_PATH}/vehicles/${vehicle.id}`, formValues)
-        .then(() => {
-          setMessage('Vehicle updated successfully!');
-          Object.assign(vehicle, formValues);
-        });
-    } catch (err: any) {
-      setMessage(`Error: ${err.message}`);
-    }
+    patchData(`${process.env.REACT_APP_API_PATH}/vehicles/${vehicle.id}`, formValues)
+      .then(() => {
+        setMessage('Vehicle updated successfully!');
+        Object.assign(vehicle, formValues); // Copy back updated values into vehicle
+      }).catch(err => {
+        setMessage(`Error: ${err.message}`);
+      });
   };
 
   // Form rendering with Material-UI
