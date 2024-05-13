@@ -29,10 +29,10 @@ function UserEdit() {
 
     patchData<User>(`${process.env.REACT_APP_API_PATH}/users/${user?.id}`, formValues)
       .then((data) => {
-        enqueueSnackbar('User updated successfully!', { preventDuplicate: true });
+        enqueueSnackbar(`User ${user?.id} updated.`, { preventDuplicate: true });
         setUser(data);
-      }).catch(err => {
-        enqueueSnackbar(`Could not update user! ${err.message}`, { preventDuplicate: true });
+      }).catch(() => {
+        enqueueSnackbar(`Could not update user ${user?.id}!`, { preventDuplicate: true });
       });
   };
 

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Box, Modal, Typography } from '@mui/material';
-import VehicleEdit from './VehicleEdit';
-import { Vehicle } from '../types/Vehicle';
+import { VehicleWithRentStatus } from '../types/Vehicle';
+import VehicleRent from './VehicleRent';
+import { User } from '../types/User';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -15,13 +16,14 @@ const style = {
   p: 4,
 };
 
-interface VehicleEditModalProps {
-  vehicle: Vehicle;
+interface VehicleRentModalProps {
+  vehicle: VehicleWithRentStatus;
+  user: User;
   open: boolean;
   onClose: () => void;
 }
 
-const VehicleEditModal: React.FC<VehicleEditModalProps> = ({ vehicle, open, onClose }) => {
+const VehicleRentModal: React.FC<VehicleRentModalProps> = ({ vehicle, user, open, onClose }) => {
   return (
     <Modal
       open={open}
@@ -29,15 +31,15 @@ const VehicleEditModal: React.FC<VehicleEditModalProps> = ({ vehicle, open, onCl
       aria-labelledby="edit-vehicle-modal-title"
       aria-describedby="edit-vehicle-modal-description"
     >
-      <Box sx={style} alignContent="center">
+      <Box sx={style}>
         <Typography id="edit-vehicle-modal-title" variant="h6">
-          Edit Vehicle {vehicle.id}
+          Rent Vehicle {vehicle.id}
         </Typography>
 
-        <VehicleEdit vehicle={vehicle} onFinishedEditing={onClose} />
+        <VehicleRent vehicle={vehicle} user={user} onFinishedEditing={onClose} />
       </Box>
     </Modal>
   );
 };
 
-export default VehicleEditModal;
+export default VehicleRentModal;

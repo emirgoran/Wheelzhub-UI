@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Container, TextField, Typography } from '@mui/material';
+import { Button, Container, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import { Vehicle, VehicleEditProps } from '../types/Vehicle';
 import { patchData } from '../api/ApiUtils';
@@ -25,11 +25,11 @@ function VehicleEdit({ vehicle, onFinishedEditing }: VehicleEditProps) {
 
     patchData(`${process.env.REACT_APP_API_PATH}/vehicles/${vehicle.id}`, formValues)
       .then(() => {
-        enqueueSnackbar('Vehicle updated successfully!', { preventDuplicate: true });
+        enqueueSnackbar(`Vehicle ${vehicle.id} updated.`, { preventDuplicate: true });
         Object.assign(vehicle, formValues); // Copy back updated values into vehicle
         onFinishedEditing();
-      }).catch(err => {
-        enqueueSnackbar(`Could not update vehicle! ${err.message}`, { preventDuplicate: true });
+      }).catch(() => {
+        enqueueSnackbar(`Could not update vehicle ${vehicle.id}!`, { preventDuplicate: true });
       });
   };
 

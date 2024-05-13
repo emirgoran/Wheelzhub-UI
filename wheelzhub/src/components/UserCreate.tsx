@@ -39,13 +39,13 @@ function UserCreate() {
 
     postData<User>(`${process.env.REACT_APP_API_PATH}/users`, formValues)
       .then((data) => {
-        enqueueSnackbar('User created successfully!', { preventDuplicate: true });
+        enqueueSnackbar(`User ${formValues.username} created successfully!`, { preventDuplicate: true });
         setFormValues(defaultUserData); // Reset form inputs
         setUser(data);
         navigate('/');
       })
-      .catch(err => {
-        enqueueSnackbar(`Could not create user! ${err.message}`, { preventDuplicate: true });
+      .catch(() => {
+        enqueueSnackbar(`Could not create user ${formValues.username}!`, { preventDuplicate: true });
       });
   };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Divider, IconButton, Menu, MenuItem } from '@mui/material';
+import { Divider, IconButton, Menu, MenuItem } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useUser } from './UserContext';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -38,9 +38,9 @@ function UserMenu() {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose} component={Link} to="/userEdit">Settings</MenuItem>
+        <MenuItem onClick={handleClose} component={Link} to="/userEdit"> Settings </MenuItem>
         <Divider />
-        <MenuItem onClick={handleLogout} >Logout</MenuItem>
+        <MenuItem onClick={handleLogout}> Logout </MenuItem>
       </Menu>
     </div>
   );

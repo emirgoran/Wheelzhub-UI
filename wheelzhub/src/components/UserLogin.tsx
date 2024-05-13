@@ -39,13 +39,13 @@ function UserLogin() {
 
     postData<User>(`${process.env.REACT_APP_API_PATH}/users/login`, formValues)
       .then((data) => {
-        enqueueSnackbar('Logged in successfully!', { preventDuplicate: true });
+        enqueueSnackbar(`User ${formValues.username} logged in successfully!`, { preventDuplicate: true });
         setUser(data);
         console.log(data);
         navigate('/');
       })
       .catch(err => {
-        enqueueSnackbar(`Could not log in! ${err.message}`, { preventDuplicate: true });
+        enqueueSnackbar(`Could not log in user ${formValues.username}!`, { preventDuplicate: true });
       });
   };
 

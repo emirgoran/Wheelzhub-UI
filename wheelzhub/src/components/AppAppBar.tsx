@@ -47,20 +47,6 @@ export default function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
     navigate('/userRegister');
   };
 
-  const scrollToSection = (sectionId: string) => {
-    const sectionElement = document.getElementById(sectionId);
-    const offset = 128;
-    if (sectionElement) {
-      const targetScroll = sectionElement.offsetTop - offset;
-      sectionElement.scrollIntoView({ behavior: 'smooth' });
-      window.scrollTo({
-        top: targetScroll,
-        behavior: 'smooth',
-      });
-      setOpen(false);
-    }
-  };
-
   return (
     <AppBar
       position="fixed"
@@ -108,14 +94,6 @@ export default function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
 
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <VehicleMenu />
-              <Button
-                variant="text"
-                color="info"
-                size="small"
-                onClick={() => scrollToSection('recently-viewed')}
-              >
-                Recently viewed
-              </Button>
             </Box>
           </Box>
           <Box
@@ -164,9 +142,6 @@ export default function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 </Box>
                 <Divider sx={{ my: 3 }} />
                 <VehicleMenu />
-                <MenuItem onClick={() => scrollToSection('highlights')}>
-                  Highlights
-                </MenuItem>
 
                 {!user ? (
                   <>

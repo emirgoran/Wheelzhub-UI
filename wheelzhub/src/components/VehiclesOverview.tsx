@@ -4,11 +4,19 @@ import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import VehicleEditModal from './VehicleEditModal';
-import { Vehicle } from '../types/Vehicle';
+import { VehicleWithRentStatus } from '../types/Vehicle';
 import { deleteData, fetchData } from '../api/ApiUtils';
 import { useSnackbar } from 'notistack';
+import CarRentalIcon from '@mui/icons-material/CarRental';
+import AvailableIcon from '@mui/icons-material/Check';
+import NotAvailableIcon from '@mui/icons-material/Clear';
+import VehicleRentModal from './VehicleRentModal';
+import { useUser } from './UserContext';
 
 function VehiclesOverview() {
+
+  // USER CONTEXT
+  const { user, setUser } = useUser();
 
   // SNACKBAR
 
@@ -16,29 +24,44 @@ function VehiclesOverview() {
 
   // EDIT VEHICLE SECTION
 
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [vehicle, setVehicle] = useState<Vehicle>();
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [isRentModalOpen, setRentodalOpen] = useState(false);
+  const [editVehicle, setEditVehicle] = useState<VehicleWithRentStatus>();
+  const [rentalVehicle, setRentalVehicle] = useState<VehicleWithRentStatus>();
 
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
+  const openEditModal = () => setEditModalOpen(true);
+  const closeEditModal = () => setEditModalOpen(false);
 
-  const updateVehicle = (vehicle: Vehicle) => {
-    setVehicle(vehicle);
-    openModal();
+  const openRentModal = () => setRentodalOpen(true);
+  const closeRentModal = () => setRentodalOpen(false);
+
+  const updateVehicle = (vehicle: VehicleWithRentStatus) => {
+    setEditVehicle(vehicle);
+    openEditModal();
+  };
+
+  const rentVehicle = (vehicle: VehicleWithRentStatus) => {
+    if (vehicle.rented) {
+      enqueueSnackbar(`Vehicle ${vehicle.id} has already been rented.`, { preventDuplicate: true });
+      return;
+    }
+
+    setRentalVehicle(vehicle);
+    openRentModal();
   };
 
   // VIEW AND DELETE VEHICLE SECTION
 
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [vehicles, setVehicles] = useState<VehicleWithRentStatus[]>([]);
 
   // Function to fetch vehicles from the API
   const fetchVehicles = async () => {
-    fetchData<Vehicle[]>(`${process.env.REACT_APP_API_PATH}/vehicles`)
+    fetchData<VehicleWithRentStatus[]>(`${process.env.REACT_APP_API_PATH}/vehicles/withRentStatus`)
       .then((data) => {
         setVehicles(data);
       })
       .catch(err => {
-        enqueueSnackbar(`Failed to fetch vehicles data. Error: ${err.message}`, { preventDuplicate: true });
+        enqueueSnackbar(`Failed to fetch vehicle data.`, { preventDuplicate: true });
       });
   };
 
@@ -50,7 +73,7 @@ function VehiclesOverview() {
         enqueueSnackbar(`Vehicle ${id} deleted.`, { preventDuplicate: true });
       })
       .catch(err => {
-        enqueueSnackbar(`Failed to delete vehicle ${id}. Error: ${err.message}`, { preventDuplicate: true });
+        enqueueSnackbar(`Failed to delete vehicle ${id}!`, { preventDuplicate: true });
       });
   };
 
@@ -72,12 +95,13 @@ function VehiclesOverview() {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Vehicle ID</TableCell>
-                <TableCell align="right">Make</TableCell>
-                <TableCell align="right">Model</TableCell>
-                <TableCell align="right">Year</TableCell>
-                <TableCell align="right">License&nbsp;plate</TableCell>
-                <TableCell align="right">Actions</TableCell>
+                <TableCell align="center">Vehicle ID</TableCell>
+                <TableCell align="center">Make</TableCell>
+                <TableCell align="center">Model</TableCell>
+                <TableCell align="center">Year</TableCell>
+                <TableCell align="center">License&nbsp;plate</TableCell>
+                <TableCell align="center">Available</TableCell>
+                <TableCell align="center">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -86,13 +110,18 @@ function VehiclesOverview() {
                   key={vehicle.id}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
-                  <TableCell align="right">{vehicle.id}</TableCell>
-                  <TableCell align="right" component="th" scope="row">{vehicle.make}</TableCell>
-                  <TableCell align="right">{vehicle.model}</TableCell>
-                  <TableCell align="right">{vehicle.year}</TableCell>
-                  <TableCell align="right">{vehicle.licensePlate}</TableCell>
+                  <TableCell align="center">{vehicle.id}</TableCell>
+                  <TableCell align="center" component="th" scope="row">{vehicle.make}</TableCell>
+                  <TableCell align="center">{vehicle.model}</TableCell>
+                  <TableCell align="center">{vehicle.year}</TableCell>
+                  <TableCell align="center">{vehicle.licensePlate}</TableCell>
+                  <TableCell align="center">
+                    <IconButton aria-label="status">
+                      {vehicle.rented ? <NotAvailableIcon style={{ color: 'red' }} /> : <AvailableIcon style={{ color: 'green' }} />}
+                    </IconButton>
+                  </TableCell>
 
-                  <TableCell align="right">
+                  <TableCell align="center">
                     <IconButton
                       aria-label="delete"
                       color="secondary"
@@ -108,6 +137,16 @@ function VehiclesOverview() {
                     >
                       <EditIcon />
                     </IconButton>
+
+                    {user &&
+                      <IconButton
+                        aria-label="update"
+                        color="primary"
+                        onClick={() => rentVehicle(vehicle)}
+                      >
+                        <CarRentalIcon style={{ color: vehicle.rented ? 'red' : 'green' }} />
+                      </IconButton>
+                    }
                   </TableCell>
                 </TableRow>
               ))}
@@ -116,7 +155,8 @@ function VehiclesOverview() {
         </TableContainer>
       </Box>
 
-      {vehicle && <VehicleEditModal vehicle={vehicle} open={isModalOpen} onClose={closeModal} />}
+      {editVehicle && <VehicleEditModal vehicle={editVehicle} open={isEditModalOpen} onClose={closeEditModal} />}
+      {rentalVehicle && user && <VehicleRentModal vehicle={rentalVehicle} user={user} open={isRentModalOpen} onClose={closeRentModal} />}
 
     </Container>
   );

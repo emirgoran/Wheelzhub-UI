@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Container, TextField, Typography } from '@mui/material';
+import { Button, Container, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import { Vehicle } from '../types/Vehicle';
 
@@ -37,7 +37,7 @@ function VehicleCreate() {
         setFormValues(defaultVehicleData); // Reset form inputs
       })
       .catch(err => {
-        enqueueSnackbar(`Could not create vehicle! ${err.message}`, { preventDuplicate: true });
+        enqueueSnackbar(`Could not create vehicle ${formValues.id}!`, { preventDuplicate: true });
       });
   };
 
